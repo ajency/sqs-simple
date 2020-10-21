@@ -12,6 +12,8 @@ class SqsWorker
     public $MaxNumberOfMessages = 1;
     public $VisibilityTimeout   = 3600;
     public $workerProcess       = false;
+    public $AttributeNames        = ["SentTimestamp","ApproximateReceiveCount"];
+    public $MessageAttributeNames = ["Subject","Message"];
     
     /**
      * SqsWorker constructor.
@@ -165,9 +167,9 @@ class SqsWorker
         }
         
         $result = $this->SqsClient->receiveMessage([
-            'AttributeNames'        => ['SentTimestamp'],
+            'AttributeNames'        => $this->AttributeNames,
             'MaxNumberOfMessages'   => $this->MaxNumberOfMessages,
-            'MessageAttributeNames' => ['All'],
+            'MessageAttributeNames' => $this->MessageAttributeNames,
             'QueueUrl'              => $this->queueUrl, // REQUIRED
             'WaitTimeSeconds'       => $this->WaitTimeSeconds,
             'VisibilityTimeout'     => $this->VisibilityTimeout,
